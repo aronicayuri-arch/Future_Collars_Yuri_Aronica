@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Balance Change — Accounting System</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 40px 20px;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .form-card h2 {
+      margin-bottom: 5px;
+      color: #3b4351;
+    }
+
+    .form-card .form-subtitle {
+      color: #8e9daa;
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #8e9daa;
+      font-size: 0.9rem;
+    }
+
+    .back-link:hover { color: #ffb700; }
+
+    /* Radio button group styling */
+    .operation-group {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .operation-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ── Navbar ── -->
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="history.html" class="btn btn-link">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+
+    <div class="form-card">
+
+      <h2>⚖️ Balance Change</h2>
+      <p class="form-subtitle">Manually add or subtract an amount from the account balance.</p>
+
+      <!-- Success message -->
+      <div class="toast toast-success" id="successMsg" style="display:none;">
+        <button class="btn btn-clear float-right" onclick="this.parentElement.style.display='none'"></button>
+        ✔ Balance updated successfully!
+      </div>
+
+      <!-- Error message -->
+      <div class="toast toast-error" id="errorMsg" style="display:none;">
+        <button class="btn btn-clear float-right" onclick="this.parentElement.style.display='none'"></button>
+        ✖ Please fill in all fields correctly.
+      </div>
+
+      <!-- Form -->
+      <form id="balanceForm" novalidate>
+
+        <!-- Operation type: Add or Subtract -->
+        <div class="form-group">
+          <label class="form-label">Type of Operation</label>
+          <div class="operation-group">
+
+            <label class="form-radio">
+              <input type="radio" name="operation" value="add" checked/>
+              <i class="form-icon"></i>
+              ➕ Add
+            </label>
+
+            <label class="form-radio">
+              <input type="radio" name="operation" value="subtract"/>
+              <i class="form-icon"></i>
+              ➖ Subtract
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Amount -->
+        <div class="form-group">
+          <label class="form-label" for="amount">Amount (€)</label>
+          <input
+            class="form-input"
+            type="number"
+            id="amount"
+            placeholder="e.g. 500"
+            min="0.01"
+            step="0.01"
+            required
+          />
+          <p class="form-input-hint text-error" id="amountError" style="display:none;">Amount must be a positive number.</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="form-group mt-2">
+          <button type="submit" class="btn btn-secondary mr-2">Confirm Change</button>
+          <a href="index.html" class="btn btn-link">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("balanceForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      let valid = true;
+
+      const amount = document.getElementById("amount");
+
+      // Reset errors
+      document.getElementById("amountError").style.display  = "none";
+      document.getElementById("errorMsg").style.display     = "none";
+      document.getElementById("successMsg").style.display   = "none";
+
+      // Validate amount
+      if (amount.value === "" || parseFloat(amount.value) <= 0) {
+        document.getElementById("amountError").style.display = "block";
+        valid = false;
+      }
+
+      if (valid) {
+        // Get selected operation
+        const operation = document.querySelector('input[name="operation"]:checked').value;
+        const sign = operation === "add" ? "+" : "-";
+        document.getElementById("successMsg").innerHTML =
+          `<button class="btn btn-clear float-right" onclick="this.parentElement.style.display='none'"></button>
+           ✔ Balance updated: ${sign}€${parseFloat(amount.value).toFixed(2)}`;
+        document.getElementById("successMsg").style.display = "block";
+        this.reset();
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>

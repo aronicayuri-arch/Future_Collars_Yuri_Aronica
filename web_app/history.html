@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History — Accounting System</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 40px 20px;
+    }
+
+    .page-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .page-card h2 {
+      margin-bottom: 5px;
+      color: #3b4351;
+    }
+
+    .page-card .page-subtitle {
+      color: #8e9daa;
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #8e9daa;
+      font-size: 0.9rem;
+    }
+
+    .back-link:hover { color: #5755d9; }
+
+    /* Filter bar */
+    .filter-bar {
+      background: #f0f1f4;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+
+    .filter-bar label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #3b4351;
+    }
+
+    /* Table */
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table.table td, table.table th {
+      vertical-align: middle;
+    }
+
+    .badge-sale     { background: #32b643; color: #fff; }
+    .badge-purchase { background: #5755d9; color: #fff; }
+    .badge-balance  { background: #ffb700; color: #fff; }
+
+    .no-results {
+      text-align: center;
+      padding: 40px;
+      color: #8e9daa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ── Navbar ── -->
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="history.html" class="btn btn-link active">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+
+    <div class="page-card">
+
+      <h2>📋 Operations History</h2>
+      <p class="page-subtitle">
+        View the full history or filter by line range.
+        Corresponds to: <code>/history/</code> or <code>/history/&lt;line_from&gt;/&lt;line_to&gt;/</code>
+      </p>
+
+      <!-- ── Filter bar ── -->
+      <div class="filter-bar">
+        <div class="columns">
+
+          <div class="column col-4 col-sm-12">
+            <div class="form-group">
+              <label class="form-label" for="lineFrom">From line</label>
+              <input class="form-input input-sm" type="number" id="lineFrom" placeholder="e.g. 0" min="0"/>
+            </div>
+          </div>
+
+          <div class="column col-4 col-sm-12">
+            <div class="form-group">
+              <label class="form-label" for="lineTo">To line</label>
+              <input class="form-input input-sm" type="number" id="lineTo" placeholder="e.g. 5" min="0"/>
+            </div>
+          </div>
+
+          <div class="column col-4 col-sm-12" style="display:flex; align-items:flex-end;">
+            <div class="form-group" style="width:100%;">
+              <button class="btn btn-primary btn-sm btn-block" onclick="filterHistory()">Apply Filter</button>
+            </div>
+          </div>
+
+        </div>
+
+        <p class="form-input-hint text-error" id="filterError" style="display:none;">
+          Invalid range. "From" must be less than or equal to "To".
+        </p>
+      </div>
+
+      <!-- ── History table ── -->
+      <div class="table-scroll">
+        <table class="table table-striped table-hover" id="historyTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <!-- Rows populated by JavaScript below -->
+          </tbody>
+        </table>
+        <div class="no-results" id="noResults" style="display:none;">
+          No operations found in this range.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // ── Sample history data (will come from Flask/backend later) ──
+    const allHistory = [
+      { type: "balance",  description: "Balance change +1000" },
+      { type: "purchase", description: "Purchase Laptop 499 2" },
+      { type: "purchase", description: "Purchase Mouse 25 10" },
+      { type: "sale",     description: "Sale Laptop 599 1" },
+      { type: "balance",  description: "Balance change -50" },
+      { type: "sale",     description: "Sale Mouse 35 3" },
+      { type: "purchase", description: "Purchase Keyboard 45 5" },
+    ];
+
+    // Badge colours per type
+    const badgeClass = {
+      sale:     "badge-sale",
+      purchase: "badge-purchase",
+      balance:  "badge-balance",
+    };
+
+    // Render a subset of history rows into the table
+    function renderHistory(rows, offset) {
+      const tbody = document.getElementById("historyBody");
+      const noResults = document.getElementById("noResults");
+      tbody.innerHTML = "";
+
+      if (rows.length === 0) {
+        noResults.style.display = "block";
+        return;
+      }
+
+      noResults.style.display = "none";
+      rows.forEach(function(item, i) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${offset + i}</td>
+          <td><span class="label ${badgeClass[item.type] || ''}">${item.type}</span></td>
+          <td>${item.description}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Filter by line range
+    function filterHistory() {
+      const fromInput = document.getElementById("lineFrom").value;
+      const toInput   = document.getElementById("lineTo").value;
+      const filterError = document.getElementById("filterError");
+      filterError.style.display = "none";
+
+      // If both empty: show all
+      if (fromInput === "" && toInput === "") {
+        renderHistory(allHistory, 0);
+        return;
+      }
+
+      const from = fromInput === "" ? 0 : parseInt(fromInput);
+      const to   = toInput   === "" ? allHistory.length - 1 : parseInt(toInput);
+
+      // Validate range
+      if (from > to || from < 0 || to >= allHistory.length) {
+        filterError.style.display = "block";
+        renderHistory(allHistory, 0);
+        return;
+      }
+
+      // Slice the history
+      renderHistory(allHistory.slice(from, to + 1), from);
+    }
+
+    // Show all history on page load
+    renderHistory(allHistory, 0);
+  </script>
+
+</body>
+</html>

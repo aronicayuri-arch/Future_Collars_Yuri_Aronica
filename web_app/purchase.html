@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purchase — Accounting System</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 40px 20px;
+    }
+
+    .form-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .form-card h2 {
+      margin-bottom: 5px;
+      color: #3b4351;
+    }
+
+    .form-card .form-subtitle {
+      color: #8e9daa;
+      margin-bottom: 30px;
+      font-size: 0.9rem;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #8e9daa;
+      font-size: 0.9rem;
+    }
+
+    .back-link:hover { color: #5755d9; }
+
+    /* Success / error toast */
+    .toast { display: none; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ── Navbar ── -->
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="history.html" class="btn btn-link">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+
+    <!-- ── Back link ── -->
+    <a href="index.html" class="back-link">← Back to Dashboard</a>
+
+    <!-- ── Form card ── -->
+    <div class="form-card">
+
+      <h2>🛒 Purchase</h2>
+      <p class="form-subtitle">Add a product to the warehouse by filling in the details below.</p>
+
+      <!-- Success message (shown after valid submit) -->
+      <div class="toast toast-success" id="successMsg">
+        <button class="btn btn-clear float-right" onclick="document.getElementById('successMsg').style.display='none'"></button>
+        ✔ Purchase completed successfully!
+      </div>
+
+      <!-- Error message (shown on invalid input) -->
+      <div class="toast toast-error" id="errorMsg">
+        <button class="btn btn-clear float-right" onclick="document.getElementById('errorMsg').style.display='none'"></button>
+        ✖ Please fill in all fields correctly.
+      </div>
+
+      <!-- Form -->
+      <form id="purchaseForm" novalidate>
+
+        <!-- Product name -->
+        <div class="form-group">
+          <label class="form-label" for="productName">Product Name</label>
+          <input
+            class="form-input"
+            type="text"
+            id="productName"
+            placeholder="e.g. Laptop"
+            required
+          />
+          <p class="form-input-hint text-error" id="productNameError" style="display:none;">Product name is required.</p>
+        </div>
+
+        <!-- Unit price -->
+        <div class="form-group">
+          <label class="form-label" for="unitPrice">Unit Price (€)</label>
+          <input
+            class="form-input"
+            type="number"
+            id="unitPrice"
+            placeholder="e.g. 499"
+            min="0"
+            step="0.01"
+            required
+          />
+          <p class="form-input-hint text-error" id="unitPriceError" style="display:none;">Unit price must be a positive number.</p>
+        </div>
+
+        <!-- Number of pieces -->
+        <div class="form-group">
+          <label class="form-label" for="pieces">Number of Pieces</label>
+          <input
+            class="form-input"
+            type="number"
+            id="pieces"
+            placeholder="e.g. 10"
+            min="1"
+            step="1"
+            required
+          />
+          <p class="form-input-hint text-error" id="piecesError" style="display:none;">Quantity must be a whole number greater than 0.</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="form-group mt-2">
+          <button type="submit" class="btn btn-primary mr-2">Confirm Purchase</button>
+          <a href="index.html" class="btn btn-link">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <!-- ── Form validation script ── -->
+  <script>
+    document.getElementById("purchaseForm").addEventListener("submit", function(e) {
+      e.preventDefault();  // Prevent actual page submit (no backend yet)
+
+      let valid = true;
+
+      const productName = document.getElementById("productName");
+      const unitPrice   = document.getElementById("unitPrice");
+      const pieces      = document.getElementById("pieces");
+
+      // Reset errors
+      document.getElementById("productNameError").style.display = "none";
+      document.getElementById("unitPriceError").style.display   = "none";
+      document.getElementById("piecesError").style.display      = "none";
+      document.getElementById("errorMsg").style.display         = "none";
+      document.getElementById("successMsg").style.display       = "none";
+
+      // Validate product name
+      if (productName.value.trim() === "") {
+        document.getElementById("productNameError").style.display = "block";
+        valid = false;
+      }
+
+      // Validate unit price
+      if (unitPrice.value === "" || parseFloat(unitPrice.value) < 0) {
+        document.getElementById("unitPriceError").style.display = "block";
+        valid = false;
+      }
+
+      // Validate pieces
+      if (pieces.value === "" || parseInt(pieces.value) < 1 || !Number.isInteger(parseFloat(pieces.value))) {
+        document.getElementById("piecesError").style.display = "block";
+        valid = false;
+      }
+
+      // Show result
+      if (valid) {
+        document.getElementById("successMsg").style.display = "block";
+        this.reset();  // Clear form fields
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
+      }
+    });
+  </script>
+
+</body>
+</html>

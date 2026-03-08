@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accounting System</title>
+
+  <!-- Spectre.css via CDN -->
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+
+  <style>
+    body {
+      background-color: #00BCD4;
+      background-color: #f8f9fa;
+    }
+
+    .page-title {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #3b4351;
+      margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+      color: #8e9daa;
+      margin-bottom: 40px;
+    }
+
+    /* Dashboard cards */
+    .dashboard-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .dashboard-card .card-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8e9daa;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-card .card-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #3b4351;
+    }
+
+    .dashboard-card.balance .card-value  { color: #32b643; }
+    .dashboard-card.stock .card-value    { color: #5755d9; }
+
+    /* Action buttons section */
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #8e9daa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 40px 0 20px;
+    }
+
+    .action-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 25px 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: box-shadow 0.2s;
+    }
+
+    .action-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+    }
+
+    .action-card .action-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .action-card h5 {
+      margin-bottom: 8px;
+      color: #3b4351;
+    }
+
+    .action-card p {
+      font-size: 0.8rem;
+      color: #8e9daa;
+      margin-bottom: 20px;
+    }
+
+    /* Nav */
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- ── Navbar ── -->
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="history.html" class="btn btn-link">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+
+    <!-- ── Page header ── -->
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Overview of your current account balance and warehouse stock.</p>
+
+    <!-- ── Dashboard cards ── -->
+    <div class="columns">
+
+      <div class="column col-6 col-sm-12">
+        <div class="dashboard-card balance">
+          <div class="card-label">💰 Account Balance</div>
+          <div class="card-value">€ 1,250.00</div>
+        </div>
+      </div>
+
+      <div class="column col-6 col-sm-12">
+        <div class="dashboard-card stock">
+          <div class="card-label">📦 Total Stock Items</div>
+          <div class="card-value">42</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Action buttons ── -->
+    <div class="section-title">Operations</div>
+
+    <div class="columns">
+
+      <!-- Purchase -->
+      <div class="column col-4 col-sm-12">
+        <div class="action-card">
+          <div class="action-icon">🛒</div>
+          <h5>Purchase</h5>
+          <p>Buy products and add them to the warehouse inventory.</p>
+          <a href="purchase.html" class="btn btn-primary btn-block">Open Form</a>
+        </div>
+      </div>
+
+      <!-- Sale -->
+      <div class="column col-4 col-sm-12">
+        <div class="action-card">
+          <div class="action-icon">💸</div>
+          <h5>Sale</h5>
+          <p>Sell products from the warehouse and update balance.</p>
+          <a href="sale.html" class="btn btn-success btn-block">Open Form</a>
+        </div>
+      </div>
+
+      <!-- Balance Change -->
+      <div class="column col-4 col-sm-12">
+        <div class="action-card">
+          <div class="action-icon">⚖️</div>
+          <h5>Balance Change</h5>
+          <p>Manually add or subtract from the account balance.</p>
+          <a href="balance_change.html" class="btn btn-secondary btn-block">Open Form</a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Footer ── -->
+    <footer class="text-center mt-4">
+      <small class="text-gray">Accounting System — Python Course Exercise</small>
+    </footer>
+
+  </div>
+</body>
+</html>
