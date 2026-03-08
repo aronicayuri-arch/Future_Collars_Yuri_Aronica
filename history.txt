@@ -1,0 +1,352 @@
+commit 1c2947b98a4819c2c78e554a48b7a20e45686847
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:42:08 2025 +0100
+
+    Split song: move verse 1 and chorus 1 to separate files
+
+diff --git a/verse-1.txt b/verse-1.txt
+new file mode 100644
+index 0000000..ddd78d2
+--- /dev/null
++++ b/verse-1.txt
+@@ -0,0 +1,9 @@
++[Verse1]
++Sugnu sempri alla finestra e viru genti ca furria pà strada
++Genti bedda, laria allegra, mutriusa e siddiata
++Genti arripudduta cu li gigghia isati e a vucca stritta
++"Turi ho vogghia di quaccosa, un passabocca, un lemonsoda"
++Iddu ci arrispunni, "Giusi, quannu ti chiamavi Giuseppina
++Eri licca pà broscia cà granita"
++"Turi tu n'ha fattu strada e ora che sei grosso imprenditori
++T'ha 'nsignari a classi 'ntò parrari"
+\ No newline at end of file
+
+commit 81c1a3115d48da555c08e6a19d5c15e725d11bf9
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:45:57 2025 +0100
+
+    Split song: move verse 2 and chorus 2 to separate files
+
+diff --git a/verse-2.txt b/verse-2.txt
+new file mode 100644
+index 0000000..f03fd89
+--- /dev/null
++++ b/verse-2.txt
+@@ -0,0 +1,9 @@
++[Verse 2]
++La domenica mattina dagli altoparlanti della chiesa
++A vuci 'i Patri Coppola n'antrona i casi, trasi dintra l'ossa
++"Piccaturi rinunciati a ddi piccati di la carni
++Quannu u riavulu s'affaccia rafforzatevi a mutanna"
++Quannu attagghiu di la chiesa si posteggia un machinone
++Scinni Saro Branchia detto Re Leone
++Patri Coppola balbetta e ammogghia l'omelia cu tri paroli
++Perché sua Maestà s'ha fari a comunioni
+\ No newline at end of file
+
+commit 93e6bdd756a61c08724164f5af24b3efd0bdbeaa
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:48:48 2025 +0100
+
+    Split song: move verse 3 and chorus 3 to separate files
+
+diff --git a/verse-3.txt b/verse-3.txt
+new file mode 100644
+index 0000000..c25db0f
+--- /dev/null
++++ b/verse-3.txt
+@@ -0,0 +1,9 @@
++[Verse 3]
++Sugnu sempri alla finestra e viru a ranni civiltà
++Ca ha statu, unni Turchi, Ebrei e Cristiani si stringeunu la manu
++Tannu si pinsava ca "la diversità è ricchezza"
++Tempi di biddizza e di puisia, d'amuri e di saggezza
++Zoccu ha statu aieri, oggi forsi ca putissi riturnari
++Si truvamu semi boni di chiantari
++'Nta sta terra 'i focu e mari oggi sentu ca mi parra u cori
++E dici ca li cosi stannu pì canciari
+
+commit 481633830b6a8ce067efc97a5dfbb244081bc5ae (HEAD -> master)
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:53:04 2025 +0100
+
+    Revert "Remove one line from chorus 1"
+
+    This reverts commit 1b5f6f4b762d91e86dd4bf070761399625bf0b89.
+
+diff --git a/chorus-1.txt b/chorus-1.txt
+index bffb92c..7c9d635 100644
+--- a/chorus-1.txt
++++ b/chorus-1.txt
+@@ -3,3 +3,4 @@ Chi ci aviti di taliari, 'un aviti autru a cui pinsari
+ Almeno un pocu di chiffari
+ "Itavinni a travagghiari" vannia 'n vecchiu indispettitu
+ "Avemu u picciu arreri o vitru"
++Jù ci dicu "m'ha scusari, chista è la me casa e staju unni mi pare
+\ No newline at end of file
+
+commit 1b5f6f4b762d91e86dd4bf070761399625bf0b89
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:51:11 2025 +0100
+
+    Remove one line from chorus 1
+
+diff --git a/chorus-1.txt b/chorus-1.txt
+index 7c9d635..bffb92c 100644
+--- a/chorus-1.txt
++++ b/chorus-1.txt
+@@ -3,4 +3,3 @@ Chi ci aviti di taliari, 'un aviti autru a cui pinsari
+ Almeno un pocu di chiffari
+ "Itavinni a travagghiari" vannia 'n vecchiu indispettitu
+ "Avemu u picciu arreri o vitru"
+-Jù ci dicu "m'ha scusari, chista è la me casa e staju unni mi pare
+\ No newline at end of file
+
+commit 1c2947b98a4819c2c78e554a48b7a20e45686847
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:42:08 2025 +0100
+
+    Split song: move verse 1 and chorus 1 to separate files
+
+diff --git a/chorus-1.txt b/chorus-1.txt
+
+commit 81c1a3115d48da555c08e6a19d5c15e725d11bf9
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:45:57 2025 +0100
+
+    Split song: move verse 2 and chorus 2 to separate files
+
+diff --git a/chorus-2.txt b/chorus-2.txt
+new file mode 100644
+index 0000000..7e56da2
+--- /dev/null
++++ b/chorus-2.txt
+@@ -0,0 +1,7 @@
++[Chorus 2]
++Chi ci aviti di taliari, 'un aviti autru a cui pinsari
++Almeno un pocu di chiffari
++"Itavinni un pocu a mari", vannia un vecchiu tintu
++"Accussì janca mi pariti 'n spiddu"
++Jù ci dicu "m'ha scusari
++Picchì hati a stari ccà sutta a me casa pà 'nsultari"
+\ No newline at end of file
+
+commit 93e6bdd756a61c08724164f5af24b3efd0bdbeaa
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:48:48 2025 +0100
+
+    Split song: move verse 3 and chorus 3 to separate files
+
+diff --git a/chorus-3.txt b/chorus-3.txt
+new file mode 100644
+index 0000000..75f3173
+--- /dev/null
++++ b/chorus-3.txt
+@@ -0,0 +1,5 @@
++[Chorus 3]
++Chi ci aviti di taliari 'un aviti autru a cui pinsari
++Almeno un poco di chiffari
++Itavinni a ballari, ittati quattru sauti e nisciti giustu pì sbariari
++Jù ci dicu "Cù piaciri, c'è qualchi danza streusa ca vuliti cunsigghiari"
+\ No newline at end of file
+
+commit 93e6bdd756a61c08724164f5af24b3efd0bdbeaa
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:48:48 2025 +0100
+
+    Split song: move verse 3 and chorus 3 to separate files
+
+diff --git a/song.txt b/song.txt
+index 983488b..0414009 100644
+--- a/song.txt
++++ b/song.txt
+@@ -10,18 +10,6 @@
+
+
+
+-[Verse 3]
+-Sugnu sempri alla finestra e viru a ranni civiltà
+-Ca ha statu, unni Turchi, Ebrei e Cristiani si stringeunu la manu
+-Tannu si pinsava ca "la diversità è ricchezza"
+-Tempi di biddizza e di puisia, d'amuri e di saggezza
+-Zoccu ha statu aieri, oggi forsi ca putissi riturnari
+-Si truvamu semi boni di chiantari
+-'Nta sta terra 'i focu e mari oggi sentu ca mi parra u cori
+-E dici ca li cosi stannu pì canciari
+-
+-[Chorus 3]
+-Chi ci aviti di taliari 'un aviti autru a cui pinsari
+-Almeno un poco di chiffari
+-Itavinni a ballari, ittati quattru sauti e nisciti giustu pì sbariari
+commit 93e6bdd756a61c08724164f5af24b3efd0bdbeaa
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:48:48 2025 +0100
+
+    Split song: move verse 3 and chorus 3 to separate files
+
+diff --git a/song.txt b/song.txt
+index 983488b..0414009 100644
+--- a/song.txt
++++ b/song.txt
+@@ -10,18 +10,6 @@
+
+
+
+-[Verse 3]
+-Sugnu sempri alla finestra e viru a ranni civiltà
+-Ca ha statu, unni Turchi, Ebrei e Cristiani si stringeunu la manu
+-Tannu si pinsava ca "la diversità è ricchezza"
+-Tempi di biddizza e di puisia, d'amuri e di saggezza
+-Zoccu ha statu aieri, oggi forsi ca putissi riturnari
+-Si truvamu semi boni di chiantari
+-'Nta sta terra 'i focu e mari oggi sentu ca mi parra u cori
+-E dici ca li cosi stannu pì canciari
+-
+-[Chorus 3]
+-Chi ci aviti di taliari 'un aviti autru a cui pinsari
+-Almeno un poco di chiffari
+-Itavinni a ballari, ittati quattru sauti e nisciti giustu pì sbariari
+-Jù ci dicu "Cù piaciri, c'è qualchi danza streusa ca vuliti cunsigghiari"
+\ No newline at end of file
++<<See verse-3.txt>>
++
++<<See chorus-3.txt>>
+
+commit 81c1a3115d48da555c08e6a19d5c15e725d11bf9
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:45:57 2025 +0100
+
+    Split song: move verse 2 and chorus 2 to separate files
+
+diff --git a/song.txt b/song.txt
+index 8f24063..983488b 100644
+--- a/song.txt
++++ b/song.txt
+@@ -4,23 +4,11 @@
+
+
+
+-[Verse 2]
+-La domenica mattina dagli altoparlanti della chiesa
+-A vuci 'i Patri Coppola n'antrona i casi, trasi dintra l'ossa
+-"Piccaturi rinunciati a ddi piccati di la carni
+-Quannu u riavulu s'affaccia rafforzatevi a mutanna"
+-Quannu attagghiu di la chiesa si posteggia un machinone
+-Scinni Saro Branchia detto Re Leone
+-Patri Coppola balbetta e ammogghia l'omelia cu tri paroli
+-Perché sua Maestà s'ha fari a comunioni
+-
+-[Chorus 2]
+-Chi ci aviti di taliari, 'un aviti autru a cui pinsari
+-Almeno un pocu di chiffari
+-"Itavinni un pocu a mari", vannia un vecchiu tintu
+-"Accussì janca mi pariti 'n spiddu"
+-Jù ci dicu "m'ha scusari
+-Picchì hati a stari ccà sutta a me casa pà 'nsultari"
++<<See verse-2.txt>>
++
++<<See chorus-2.txt>>
++
++
+
+ [Verse 3]
+ Sugnu sempri alla finestra e viru a ranni civiltà
+
+commit 1c2947b98a4819c2c78e554a48b7a20e45686847
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:42:08 2025 +0100
+
+    Split song: move verse 1 and chorus 1 to separate files
+
+diff --git a/song.txt b/song.txt
+index d6256a9..8f24063 100644
+--- a/song.txt
++++ b/song.txt
+@@ -1,19 +1,8 @@
+-[Verse1]
+-Sugnu sempri alla finestra e viru genti ca furria pà strada
+-Genti bedda, laria allegra, mutriusa e siddiata
+-Genti arripudduta cu li gigghia isati e a vucca stritta
+-"Turi ho vogghia di quaccosa, un passabocca, un lemonsoda"
+-Iddu ci arrispunni, "Giusi, quannu ti chiamavi Giuseppina
+-Eri licca pà broscia cà granita"
+-"Turi tu n'ha fattu strada e ora che sei grosso imprenditori
+-T'ha 'nsignari a classi 'ntò parrari"
++<<See verse-1.txt>>
++
++<<See chorus-1.txt>>
++
+
+-[Chorus 1]
+-Chi ci aviti di taliari, 'un aviti autru a cui pinsari
+-Almeno un pocu di chiffari
+-"Itavinni a travagghiari" vannia 'n vecchiu indispettitu
+-"Avemu u picciu arreri o vitru"
+-Jù ci dicu "m'ha scusari, chista è la me casa e staju unni mi pare
+
+ [Verse 2]
+ La domenica mattina dagli altoparlanti della chiesa
+
+commit 9108869d5fda85c570590deadc0d8d5c086b49b4
+Author: Yuri <aronicayuri.com>
+Date:   Sat Nov 29 16:34:05 2025 +0100
+
+    Add full song in song.txt
+
+diff --git a/song.txt b/song.txt
+new file mode 100644
+index 0000000..d6256a9
+--- /dev/null
++++ b/song.txt
+@@ -0,0 +1,50 @@
++[Verse1]
++Sugnu sempri alla finestra e viru genti ca furria pà strada
++Genti bedda, laria allegra, mutriusa e siddiata
++Genti arripudduta cu li gigghia isati e a vucca stritta
++"Turi ho vogghia di quaccosa, un passabocca, un lemonsoda"
++Iddu ci arrispunni, "Giusi, quannu ti chiamavi Giuseppina
++Eri licca pà broscia cà granita"
++"Turi tu n'ha fattu strada e ora che sei grosso imprenditori
++T'ha 'nsignari a classi 'ntò parrari"
++
++[Chorus 1]
++Chi ci aviti di taliari, 'un aviti autru a cui pinsari
++Almeno un pocu di chiffari
++"Itavinni a travagghiari" vannia 'n vecchiu indispettitu
++"Avemu u picciu arreri o vitru"
++Jù ci dicu "m'ha scusari, chista è la me casa e staju unni mi pare
++
++[Verse 2]
++La domenica mattina dagli altoparlanti della chiesa
++A vuci 'i Patri Coppola n'antrona i casi, trasi dintra l'ossa
++"Piccaturi rinunciati a ddi piccati di la carni
++Quannu u riavulu s'affaccia rafforzatevi a mutanna"
++Quannu attagghiu di la chiesa si posteggia un machinone
++Scinni Saro Branchia detto Re Leone
++Patri Coppola balbetta e ammogghia l'omelia cu tri paroli
++Perché sua Maestà s'ha fari a comunioni
++
++[Chorus 2]
++Chi ci aviti di taliari, 'un aviti autru a cui pinsari
++Almeno un pocu di chiffari
++"Itavinni un pocu a mari", vannia un vecchiu tintu
++"Accussì janca mi pariti 'n spiddu"
++Jù ci dicu "m'ha scusari
++Picchì hati a stari ccà sutta a me casa pà 'nsultari"
++
++[Verse 3]
++Sugnu sempri alla finestra e viru a ranni civiltà
++Ca ha statu, unni Turchi, Ebrei e Cristiani si stringeunu la manu
++Tannu si pinsava ca "la diversità è ricchezza"
++Tempi di biddizza e di puisia, d'amuri e di saggezza
++Zoccu ha statu aieri, oggi forsi ca putissi riturnari
++Si truvamu semi boni di chiantari
++'Nta sta terra 'i focu e mari oggi sentu ca mi parra u cori
++E dici ca li cosi stannu pì canciari
++
++[Chorus 3]
++Chi ci aviti di taliari 'un aviti autru a cui pinsari
++Almeno un poco di chiffari
++Itavinni a ballari, ittati quattru sauti e nisciti giustu pì sbariari
++Jù ci dicu "Cù piaciri, c'è qualchi danza streusa ca vuliti cunsigghiari"
+\ No newline at end of file
