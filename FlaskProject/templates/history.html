@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>History — Accounting System</title>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+  <style>
+    body { background-color: #f8f9fa; padding: 40px 20px; }
+    .page-card { background: #fff; border-radius: 8px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .page-card h2 { margin-bottom: 5px; color: #3b4351; }
+    .page-subtitle { color: #8e9daa; margin-bottom: 30px; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #8e9daa; font-size: 0.9rem; }
+    .filter-bar { background: #f0f1f4; border-radius: 6px; padding: 16px 20px; margin-bottom: 24px; }
+    .no-results { text-align: center; padding: 40px; color: #8e9daa; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="/history/" class="btn btn-link active">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+    <a href="/" class="back-link">← Back to Dashboard</a>
+
+    <div class="page-card">
+      <h2>📋 Operations History</h2>
+      <p class="page-subtitle">
+        View the full history or filter by line range.<br>
+        URL format: <code>/history/</code> or <code>/history/&lt;from&gt;/&lt;to&gt;/</code>
+      </p>
+
+      <!-- Filter bar — submits as a GET to /history/from/to/ -->
+      <div class="filter-bar">
+        <form method="GET" action="" id="filterForm">
+          <div class="columns">
+            <div class="column col-4 col-sm-12">
+              <div class="form-group">
+                <label class="form-label">From line</label>
+                <input class="form-input input-sm" type="number" id="lineFrom" placeholder="e.g. 0" min="0" value="{{ line_from if line_from is not none else '' }}"/>
+              </div>
+            </div>
+            <div class="column col-4 col-sm-12">
+              <div class="form-group">
+                <label class="form-label">To line</label>
+                <input class="form-input input-sm" type="number" id="lineTo" placeholder="e.g. 5" min="0" value="{{ line_to if line_to is not none else '' }}"/>
+              </div>
+            </div>
+            <div class="column col-4 col-sm-12" style="display:flex; align-items:flex-end;">
+              <div class="form-group" style="width:100%;">
+                <button type="button" class="btn btn-primary btn-sm btn-block" onclick="applyFilter()">Apply Filter</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <!-- Error from Flask -->
+        {% if error %}
+        <p class="form-input-hint text-error">✖ {{ error }}</p>
+        {% endif %}
+      </div>
+
+      <!-- History table — populated by Flask -->
+      {% if operations %}
+      <div class="table-scroll">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for index, op in operations %}
+            <tr>
+              <td>{{ index }}</td>
+              <td>{{ op }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="no-results">No operations found.</div>
+      {% endif %}
+
+    </div>
+  </div>
+
+  <script>
+    // Build the URL /history/from/to/ and navigate to it
+    function applyFilter() {
+      const from = document.getElementById("lineFrom").value;
+      const to   = document.getElementById("lineTo").value;
+
+      if (from === "" && to === "") {
+        window.location.href = "/history/";
+      } else {
+        window.location.href = "/history/" + from + "/" + to + "/";
+      }
+    }
+  </script>
+
+</body>
+</html>

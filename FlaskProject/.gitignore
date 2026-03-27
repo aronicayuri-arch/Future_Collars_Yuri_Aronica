@@ -1,0 +1,12 @@
+# Virtual environment - do not push
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Database file (optional - remove this line if you want to push it)
+accounting_db.txt
+
+# PyCharm settings
+.idea/
