@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Accounting System</title>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+  <style>
+    body { background-color: #f8f9fa; padding: 40px 20px; }
+    .page-title { font-size: 2rem; font-weight: bold; color: #3b4351; margin-bottom: 10px; }
+    .page-subtitle { color: #8e9daa; margin-bottom: 40px; }
+    .dashboard-card { background: #fff; border-radius: 8px; padding: 30px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .dashboard-card .card-label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #8e9daa; margin-bottom: 10px; }
+    .dashboard-card .card-value { font-size: 2.2rem; font-weight: bold; color: #3b4351; }
+    .dashboard-card.balance .card-value { color: #32b643; }
+    .dashboard-card.stock .card-value   { color: #5755d9; }
+    .section-title { font-size: 1rem; font-weight: 600; color: #8e9daa; text-transform: uppercase; letter-spacing: 1px; margin: 40px 0 20px; }
+    .action-card { background: #fff; border-radius: 8px; padding: 25px 20px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: box-shadow 0.2s; }
+    .action-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.13); }
+    .action-card .action-icon { font-size: 2rem; margin-bottom: 10px; }
+    .action-card h5 { margin-bottom: 8px; color: #3b4351; }
+    .action-card p { font-size: 0.8rem; color: #8e9daa; margin-bottom: 20px; }
+    .navbar-brand { font-weight: bold; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="/history/" class="btn btn-link">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Overview of your current account balance and warehouse stock.</p>
+
+    <div class="columns">
+      <div class="column col-6 col-sm-12">
+        <div class="dashboard-card balance">
+          <div class="card-label">💰 Account Balance</div>
+          <!-- balance comes from Flask -->
+          <div class="card-value">€ {{ balance }}</div>
+        </div>
+      </div>
+      <div class="column col-6 col-sm-12">
+        <div class="dashboard-card stock">
+          <div class="card-label">📦 Total Stock Items</div>
+          <!-- total_stock comes from Flask -->
+          <div class="card-value">{{ total_stock }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Operations</div>
+
+    <div class="columns">
+      <div class="column col-4 col-sm-12">
+        <div class="action-card">
+          <div class="action-icon">🛒</div>
+          <h5>Purchase</h5>
+          <p>Buy products and add them to the warehouse inventory.</p>
+          <a href="/purchase/" class="btn btn-primary btn-block">Open Form</a>
+        </div>
+      </div>
+      <div class="column col-4 col-sm-12">
+        <div class="action-card">
+          <div class="action-icon">💸</div>
+          <h5>Sale</h5>
+          <p>Sell products from the warehouse and update balance.</p>
+          <a href="/sale/" class="btn btn-success btn-block">Open Form</a>
+        </div>
+      </div>
+      <div class="column col-4 col-sm-12">
+        <div class="action-card">
+          <div class="action-icon">⚖️</div>
+          <h5>Balance Change</h5>
+          <p>Manually add or subtract from the account balance.</p>
+          <a href="/balance/" class="btn btn-secondary btn-block">Open Form</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center mt-4">
+      <small class="text-gray">Accounting System — Python Course Exercise</small>
+    </footer>
+
+  </div>
+</body>
+</html>

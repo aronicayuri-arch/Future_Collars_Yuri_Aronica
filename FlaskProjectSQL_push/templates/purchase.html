@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purchase — Accounting System</title>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"/>
+  <style>
+    body { background-color: #f8f9fa; padding: 40px 20px; }
+    .form-card { background: #fff; border-radius: 8px; padding: 40px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 520px; margin: 0 auto; }
+    .form-card h2 { margin-bottom: 5px; color: #3b4351; }
+    .form-subtitle { color: #8e9daa; margin-bottom: 30px; font-size: 0.9rem; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #8e9daa; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header class="navbar mb-2">
+      <section class="navbar-section">
+        <span class="navbar-brand text-primary">📒 Accounting System</span>
+      </section>
+      <section class="navbar-section">
+        <a href="/history/" class="btn btn-link">History</a>
+      </section>
+    </header>
+
+    <hr class="mb-4"/>
+    <a href="/" class="back-link">← Back to Dashboard</a>
+
+    <div class="form-card">
+      <h2>🛒 Purchase</h2>
+      <p class="form-subtitle">Add a product to the warehouse by filling in the details below.</p>
+
+      <!-- Success message from Flask -->
+      {% if success %}
+      <div class="toast toast-success">✔ {{ success }}</div>
+      {% endif %}
+
+      <!-- Error message from Flask -->
+      {% if error %}
+      <div class="toast toast-error">✖ {{ error }}</div>
+      {% endif %}
+
+      <!-- Form posts to /purchase/ -->
+      <form method="POST" action="/purchase/">
+
+        <div class="form-group">
+          <label class="form-label" for="productName">Product Name</label>
+          <input class="form-input" type="text" id="productName" name="productName" placeholder="e.g. Laptop" required/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="unitPrice">Unit Price (€)</label>
+          <input class="form-input" type="number" id="unitPrice" name="unitPrice" placeholder="e.g. 499" min="0" step="0.01" required/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pieces">Number of Pieces</label>
+          <input class="form-input" type="number" id="pieces" name="pieces" placeholder="e.g. 10" min="1" step="1" required/>
+        </div>
+
+        <div class="form-group mt-2">
+          <button type="submit" class="btn btn-primary mr-2">Confirm Purchase</button>
+          <a href="/" class="btn btn-link">Cancel</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</body>
+</html>
