@@ -1,0 +1,13 @@
+# Virtual environment
+venv/
+
+# SQLite database file - do not push
+*.db
+instance/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# PyCharm
+.idea/
