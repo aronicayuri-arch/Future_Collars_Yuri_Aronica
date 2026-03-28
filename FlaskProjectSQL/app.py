@@ -259,8 +259,8 @@ def balance_change():
             except Exception as e:
                 db.session.rollback()
                 error = "Database error: " + str(e)
-
-    return render_template("balance_change.html", error=error, success=success)
+if __name__ == "__main__":
+    app.run(debug=True, port=5001)
 
 
 # ─────────────────────────────────────────

@@ -217,8 +217,8 @@ def history(line_from=None, line_to=None):
     """History page — shows all or filtered operations."""
     balance, warehouse, operations = load_data()
 
-    error = None
-
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
     if line_from is None and line_to is None:
         # No parameters — show all
         displayed = list(enumerate(operations))

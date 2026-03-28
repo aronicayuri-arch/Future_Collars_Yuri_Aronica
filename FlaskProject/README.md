@@ -9,7 +9,7 @@ pip install Flask
 
 2. Run the app:
 ```
-flask --app app run
+flask --app app run --port 5000
 ```
 
 3. Open in browser:
