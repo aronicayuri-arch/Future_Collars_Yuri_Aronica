@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ t('nav_services') }}</h1>
+  <p>{{ t('services_subtitle') }}</p>
+</div>
+
+<section class="section" style="background:var(--cream);">
+  <h2 class="section-title">{{ t('services_title') }}</h2>
+  <div class="gold-line"></div>
+  <div class="cards-grid">
+
+    <div class="service-card">
+      <div class="card-number">1</div>
+      <h3>{{ t('plan1_name') }}</h3>
+      <p class="includes-label">{{ t('includes') }}</p>
+      <ul class="features-list">
+        <li class="feature-item">{{ t('plan1_f1') }}</li>
+        <li class="feature-item">{{ t('plan1_f2') }}</li>
+        <li class="feature-item">{{ t('plan1_f3') }}</li>
+      </ul>
+      <div class="card-footer">
+        <div class="duration-badge">{{ t('duration') }}: {{ t('months_3') }}</div>
+        <div class="price">260 €</div>
+        <div class="online-label">{{ t('online') }}</div>
+        <a href="{{ url_for('contact') }}?package=Reset Metabolico" class="btn btn-outline" style="width:100%;">{{ t('book_plan') }}</a>
+      </div>
+    </div>
+
+    <div class="service-card featured">
+      <div class="card-number">2</div>
+      <h3>{{ t('plan2_name') }}</h3>
+      <p class="includes-label">{{ t('includes') }}</p>
+      <ul class="features-list">
+        <li class="feature-item">{{ t('plan2_f1') }}</li>
+        <li class="feature-item">{{ t('plan2_f2') }}</li>
+        <li class="feature-item">{{ t('plan2_f3') }}</li>
+      </ul>
+      <div class="card-footer">
+        <div class="duration-badge">{{ t('duration') }}: {{ t('months_6') }}</div>
+        <div class="price">360 €</div>
+        <div class="online-label">{{ t('online') }}</div>
+        <a href="{{ url_for('contact') }}?package=Nutrizione Plus" class="btn btn-white" style="width:100%;">{{ t('book_plan') }}</a>
+      </div>
+    </div>
+
+    <div class="service-card">
+      <div class="card-number">3</div>
+      <h3>{{ t('plan3_name') }}</h3>
+      <p class="includes-label">{{ t('includes') }}</p>
+      <ul class="features-list">
+        <li class="feature-item">{{ t('plan3_f1') }}</li>
+        <li class="feature-item">{{ t('plan3_f2') }}</li>
+        <li class="feature-item">{{ t('plan3_f3') }}</li>
+      </ul>
+      <div class="card-footer">
+        <div class="duration-badge">{{ t('duration') }}: {{ t('months_9') }}</div>
+        <div class="price">580 €</div>
+        <div class="online-label">{{ t('online') }}</div>
+        <a href="{{ url_for('contact') }}?package=Autonomia Alimentare" class="btn btn-outline" style="width:100%;">{{ t('book_plan') }}</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

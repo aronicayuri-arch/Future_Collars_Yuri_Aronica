@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dott.ssa Chiara Aronica — Nutrizionista</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+
+  <a href="{{ url_for('index') }}" class="navbar-brand">
+    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Chiara Aronica"/>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="{{ url_for('index') }}"        {% if request.endpoint=='index'        %}class="active"{% endif %}>{{ t('nav_home') }}</a></li>
+    <li><a href="{{ url_for('services') }}"     {% if request.endpoint=='services'     %}class="active"{% endif %}>{{ t('nav_services') }}</a></li>
+    <li><a href="{{ url_for('testimonials') }}" {% if request.endpoint=='testimonials' %}class="active"{% endif %}>{{ t('nav_testimonials') }}</a></li>
+    <li><a href="{{ url_for('contact') }}"      {% if request.endpoint=='contact'      %}class="active"{% endif %}>{{ t('nav_contact') }}</a></li>
+  </ul>
+
+  <div class="lang-switcher">
+    {% if lang == 'it' %}
+      <a href="{{ url_for('set_language', lang='it') }}" class="active">IT</a>
+      <a href="{{ url_for('set_language', lang='en') }}">EN</a>
+    {% else %}
+      <a href="{{ url_for('set_language', lang='it') }}">IT</a>
+      <a href="{{ url_for('set_language', lang='en') }}" class="active">EN</a>
+    {% endif %}
+  </div>
+
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer>
+  <p><strong>Dott.ssa Chiara Aronica</strong> — Nutrizionista &amp; Health Coach</p>
+  <p style="margin-top:8px;">© {{ now.year }} — {{ t('footer_rights') }}</p>
+</footer>
+
+</body>
+</html>

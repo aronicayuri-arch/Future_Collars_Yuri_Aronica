@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ t('test_title') }}</h1>
+  <p>{{ t('test_subtitle') }}</p>
+</div>
+
+<section class="section" style="background:var(--white);">
+  <div class="gold-line"></div>
+  <div class="testimonials-grid">
+
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <p class="testimonial-text">{% if lang=='it' %}Lavorare con Chiara mi ha cambiato la vita. Il suo approccio personalizzato alla nutrizione ha trasformato la mia salute e i miei livelli di energia. Consiglio vivamente i suoi servizi.{% else %}Working with Chiara changed my life. Her personalised approach to nutrition transformed my health and energy levels. I highly recommend her services.{% endif %}</p>
+      <div class="testimonial-author">Alessia</div>
+      <div class="testimonial-age">31 {% if lang=='it' %}anni{% else %}years old{% endif %}</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <p class="testimonial-text">{% if lang=='it' %}Grazie alla Dottoressa Aronica ho finalmente trovato un equilibrio alimentare che si adatta al mio stile di vita. Professionale, empatica e sempre disponibile.{% else %}Thanks to Dr. Aronica I finally found a nutritional balance that fits my lifestyle. Professional, empathetic and always available.{% endif %}</p>
+      <div class="testimonial-author">Marco</div>
+      <div class="testimonial-age">45 {% if lang=='it' %}anni{% else %}years old{% endif %}</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <p class="testimonial-text">{% if lang=='it' %}Ho perso 12 kg in 6 mesi senza mai sentirmi a dieta. Il piano di Chiara è sostenibile e gustoso. La consiglio a tutti!{% else %}I lost 12 kg in 6 months without ever feeling like I was on a diet. Chiara's plan is sustainable and delicious!{% endif %}</p>
+      <div class="testimonial-author">Francesca</div>
+      <div class="testimonial-age">38 {% if lang=='it' %}anni{% else %}years old{% endif %}</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <p class="testimonial-text">{% if lang=='it' %}Il supporto WhatsApp è stato fondamentale. Sapere di poter contattare Chiara in qualsiasi momento mi ha dato la motivazione per andare avanti.{% else %}The WhatsApp support was essential. Knowing I could contact Chiara at any time gave me the motivation to keep going.{% endif %}</p>
+      <div class="testimonial-author">Luca</div>
+      <div class="testimonial-age">29 {% if lang=='it' %}anni{% else %}years old{% endif %}</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <p class="testimonial-text">{% if lang=='it' %}Approccio scientifico ma umano. Chiara capisce le tue difficoltà e costruisce un piano realistico. Ho migliorato i miei valori del sangue in tre mesi.{% else %}Scientific but human approach. Chiara understands your difficulties and builds a realistic plan. I improved my blood values in three months.{% endif %}</p>
+      <div class="testimonial-author">Sofia</div>
+      <div class="testimonial-age">52 {% if lang=='it' %}anni{% else %}years old{% endif %}</div>
+    </div>
+
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <div class="quote-mark">"</div>
+      <p class="testimonial-text">{% if lang=='it' %}Non pensavo di riuscire a cambiare le mie abitudini alimentari, ma con Chiara è stato naturale. Ora ho più energia e mi sento benissimo!{% else %}I didn't think I could change my eating habits, but with Chiara it felt natural. Now I have more energy and feel great!{% endif %}</p>
+      <div class="testimonial-author">Roberto</div>
+      <div class="testimonial-age">41 {% if lang=='it' %}anni{% else %}years old{% endif %}</div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

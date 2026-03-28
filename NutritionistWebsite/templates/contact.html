@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ t('contact_title') }}</h1>
+  <p>{{ t('contact_subtitle') }}</p>
+</div>
+
+<section class="section" style="background:var(--white);">
+  <div class="contact-wrapper">
+
+    <div class="contact-info">
+      <h3>Dott.ssa Chiara Aronica</h3>
+      <p>{% if lang=='it' %}Nutrizionista registrata e health coach. Compila il modulo e ti risponderò entro 24 ore.{% else %}Registered nutritionist and health coach. Fill the form and I will reply within 24 hours.{% endif %}</p>
+      <div class="contact-detail"><span>📧</span><span>studioaronica@nutrizione.it</span></div>
+      <div class="contact-detail"><span>📱</span><span>+39 3515891480</span></div>
+      <div class="contact-detail"><span>💬</span><span>WhatsApp {% if lang=='it' %}disponibile{% else %}available{% endif %}</span></div>
+      <div class="contact-detail"><span>🌍</span><span>{{ t('online') }}</span></div>
+    </div>
+
+    <div>
+      {% if success %}<div class="toast-success">✅ {{ success }}</div>{% endif %}
+      {% if error   %}<div class="toast-error">❌ {{ error }}</div>{% endif %}
+
+      <form method="POST" action="{{ url_for('contact') }}">
+        <div class="form-group">
+          <label>{{ t('form_name') }} *</label>
+          <input type="text" name="name" placeholder="{% if lang=='it' %}Il tuo nome{% else %}Your name{% endif %}" required/>
+        </div>
+        <div class="form-group">
+          <label>{{ t('form_email') }} *</label>
+          <input type="email" name="email" placeholder="email@esempio.it" required/>
+        </div>
+        <div class="form-group">
+          <label>{{ t('form_phone') }}</label>
+          <input type="tel" name="phone" placeholder="+39 3515891480"/>
+        </div>
+        <div class="form-group">
+          <label>{{ t('form_package') }} *</label>
+          <select name="package" required>
+            <option value="">— {% if lang=='it' %}Seleziona{% else %}Select{% endif %} —</option>
+            <option value="Reset Metabolico"     {% if preselect=='Reset Metabolico'     %}selected{% endif %}>{{ t('plan1_name') }} — €260</option>
+            <option value="Nutrizione Plus"      {% if preselect=='Nutrizione Plus'      %}selected{% endif %}>{{ t('plan2_name') }} — €360</option>
+            <option value="Autonomia Alimentare" {% if preselect=='Autonomia Alimentare' %}selected{% endif %}>{{ t('plan3_name') }} — €580</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>{{ t('form_message') }}</label>
+          <textarea name="message" placeholder="{% if lang=='it' %}Scrivi qui...{% else %}Write here...{% endif %}"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">{{ t('form_submit') }}</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

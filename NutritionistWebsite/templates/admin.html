@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{{ t('admin_title') }}</h1>
+  <p>{{ bookings|length }} {% if lang=='it' %}prenotazioni totali{% else %}total bookings{% endif %}</p>
+</div>
+
+<section class="section" style="background:var(--white);">
+  {% if bookings %}
+  <div style="overflow-x:auto;">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>{{ t('admin_name') }}</th>
+          <th>{{ t('admin_email') }}</th>
+          <th>{{ t('admin_phone') }}</th>
+          <th>{{ t('admin_package') }}</th>
+          <th>{{ t('admin_message') }}</th>
+          <th>{{ t('admin_date') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+        <tr>
+          <td>{{ b.id }}</td>
+          <td>{{ b.name }}</td>
+          <td>{{ b.email }}</td>
+          <td>{{ b.phone or '—' }}</td>
+          <td><span class="package-badge">{{ b.package }}</span></td>
+          <td>{{ b.message or '—' }}</td>
+          <td>{{ b.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p style="text-align:center;color:var(--text-light);padding:60px;font-style:italic;">{{ t('no_bookings') }}</p>
+  {% endif %}
+</section>
+
+{% endblock %}
