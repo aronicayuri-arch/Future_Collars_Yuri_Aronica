@@ -193,34 +193,24 @@ def balance_change():
     if request.method == "POST":
         operation  = request.form.get("operation", "add")
         amount_str = request.form.get("amount", "").strip()
+@app.route("/history/")
+@app.route("/history/<int:line_from>/<int:line_to>/")
+def history(line_from=None, line_to=None):
+    """History page — shows all or filtered transactions from database."""
+    operations = [t.description for t in Transaction.query.all()]
+    error = None
 
-        if not amount_str:
-            error = "Amount is required."
+    if line_from is None and line_to is None:
+        displayed = list(enumerate(operations))
+    else:
+        if line_from < 0 or line_to >= len(operations) or line_from > line_to:
+            error = "Invalid range..."
+            displayed = list(enumerate(operations))
         else:
-            try:
-                amount  = float(amount_str)
-                balance = get_balance()
+            displayed = list(enumerate(operations))[line_from:line_to + 1]
 
-                if amount <= 0:
-                    error = "Amount must be greater than 0."
-                elif operation == "subtract":
-                    if balance.amount < amount:
-                        error = "Not enough balance to subtract €" + str(amount)
-                    else:
-                        balance.amount = balance.amount - amount
-                        t = Transaction(description="Balance change -" + str(amount))
-                        db.session.add(t)
-                        db.session.commit()
-                        success = "Balance updated! Subtracted €" + str(round(amount, 2)) + ". New balance: €" + str(round(balance.amount, 2))
-                else:
-                    balance.amount = balance.amount + amount
-                    t = Transaction(description="Balance change +" + str(amount))
-                    db.session.add(t)
-                    db.session.commit()
-                    success = "Balance updated! Added €" + str(round(amount, 2)) + ". New balance: €" + str(round(balance.amount, 2))
-
-            except ValueError:
-                error = "Amount must be a valid number."
+    return render_template("history.html", operations=displayed,
+                           line_from=line_from, line_to=line_to, error=error)
             except Exception as e:
                 db.session.rollback()
                 error = "Database error: " + str(e)
