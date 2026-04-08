@@ -1,47 +1,57 @@
-from flask import Flask, render_template, request, redirect, url_for
-from ast import literal_eval
+from flask import Flask, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 # ─────────────────────────────────────────
 #  Accounting Web App - Backend
 #  Flask routes for all pages and forms
+#  Uses SQLite database via Flask-SQLAlchemy
 # ─────────────────────────────────────────
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///accounting.db"
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-DB_FILE = "accounting_db.txt"
+db = SQLAlchemy(app)
 
 
 # ─────────────────────────────────────────
-#  FILE: LOAD & SAVE
+#  DATABASE MODELS
 # ─────────────────────────────────────────
 
-def load_data():
-    """Load balance, warehouse and operations from file."""
-    default = (0, {}, [])
-    try:
-        with open(DB_FILE, "r") as f:
-            lines = f.readlines()
-        if len(lines) != 3:
-            return default
-        balance    = literal_eval(lines[0].strip())
-        warehouse  = literal_eval(lines[1].strip())
-        operations = literal_eval(lines[2].strip())
-        return balance, warehouse, operations
-    except FileNotFoundError:
-        return default
-    except Exception:
-        return default
+class Balance(db.Model):
+    """Stores the current account balance (single row)."""
+    id     = db.Column(db.Integer, primary_key=True)
+    amount = db.Column(db.Float, nullable=False, default=0.0)
 
 
-def save_data(balance, warehouse, operations):
-    """Save balance, warehouse and operations to file."""
-    try:
-        with open(DB_FILE, "w") as f:
-            f.write(repr(balance)    + "\n")
-            f.write(repr(warehouse)  + "\n")
-            f.write(repr(operations) + "\n")
-    except Exception as e:
-        print("Error saving data:", e)
+class Product(db.Model):
+    """Stores warehouse products."""
+    id       = db.Column(db.Integer, primary_key=True)
+    name     = db.Column(db.String(100), unique=True, nullable=False)
+    price    = db.Column(db.Float, nullable=False)
+    quantity = db.Column(db.Integer, nullable=False, default=0)
+
+
+class Transaction(db.Model):
+    """Stores all operations history."""
+    id          = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(255), nullable=False)
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+# ─────────────────────────────────────────
+#  HELPER: Get or create balance row
+# ─────────────────────────────────────────
+
+def get_balance():
+    """Get current balance. Creates it with 0 if it doesn't exist yet."""
+    balance = Balance.query.first()
+    if balance is None:
+        balance = Balance(amount=0.0)
+        db.session.add(balance)
+        db.session.commit()
+    return balance
 
 
 # ─────────────────────────────────────────
@@ -50,13 +60,13 @@ def save_data(balance, warehouse, operations):
 
 @app.route("/")
 def index():
-    """Main page — shows balance and total stock."""
-    balance, warehouse, operations = load_data()
-
-    # Calculate total stock items
-    total_stock = sum(p["qty"] for p in warehouse.values())
-
-    return render_template("index.html", balance=balance, total_stock=total_stock)
+    """Main page — shows real balance and total stock from database."""
+    try:
+        balance     = get_balance()
+        total_stock = db.session.query(db.func.sum(Product.quantity)).scalar() or 0
+        return render_template("index.html", balance=balance.amount, total_stock=total_stock)
+    except Exception as e:
+        return render_template("index.html", balance=0, total_stock=0, error="Database error: " + str(e))
 
 
 # ─────────────────────────────────────────
@@ -66,17 +76,15 @@ def index():
 @app.route("/purchase/", methods=["GET", "POST"])
 def purchase():
     """Purchase form — GET shows the form, POST handles submission."""
-    error = None
+    error   = None
     success = None
 
     if request.method == "POST":
-        # Read form data
-        product   = request.form.get("productName", "").strip()
-        price_str = request.form.get("unitPrice", "").strip()
-        qty_str   = request.form.get("pieces", "").strip()
+        product_name = request.form.get("productName", "").strip()
+        price_str    = request.form.get("unitPrice", "").strip()
+        qty_str      = request.form.get("pieces", "").strip()
 
-        # Validate inputs
-        if not product:
+        if not product_name:
             error = "Product name is required."
         elif not price_str or not qty_str:
             error = "Please fill in all fields."
@@ -90,23 +98,30 @@ def purchase():
                 elif qty < 1:
                     error = "Quantity must be at least 1."
                 else:
-                    # Load, update and save data
-                    balance, warehouse, operations = load_data()
-                    total = price * qty
+                    total   = price * qty
+                    balance = get_balance()
 
-                    if balance < total:
-                        error = "Not enough balance to complete this purchase."
+                    if balance.amount < total:
+                        error = "Not enough balance. Available: €" + str(round(balance.amount, 2))
                     else:
-                        balance = balance - total
-                        if product not in warehouse:
-                            warehouse[product] = {"price": price, "qty": 0}
-                        warehouse[product]["qty"] = warehouse[product]["qty"] + qty
-                        operations.append("Purchase " + product + " " + str(price) + " " + str(qty))
-                        save_data(balance, warehouse, operations)
-                        success = "Purchase completed! Bought " + str(qty) + "x " + product + " for €" + str(round(total, 2))
+                        balance.amount = balance.amount - total
+                        product = Product.query.filter_by(name=product_name).first()
+                        if product is None:
+                            product = Product(name=product_name, price=price, quantity=qty)
+                            db.session.add(product)
+                        else:
+                            product.quantity = product.quantity + qty
+                            product.price    = price
+                        t = Transaction(description="Purchase " + product_name + " " + str(price) + " x" + str(qty))
+                        db.session.add(t)
+                        db.session.commit()
+                        success = "Purchase completed! Bought " + str(qty) + "x " + product_name + " for €" + str(round(total, 2))
 
             except ValueError:
                 error = "Price and quantity must be valid numbers."
+            except Exception as e:
+                db.session.rollback()
+                error = "Database error: " + str(e)
 
     return render_template("purchase.html", error=error, success=success)
 
@@ -118,15 +133,15 @@ def purchase():
 @app.route("/sale/", methods=["GET", "POST"])
 def sale():
     """Sale form — GET shows the form, POST handles submission."""
-    error = None
+    error   = None
     success = None
 
     if request.method == "POST":
-        product   = request.form.get("productName", "").strip()
-        price_str = request.form.get("unitPrice", "").strip()
-        qty_str   = request.form.get("pieces", "").strip()
+        product_name = request.form.get("productName", "").strip()
+        price_str    = request.form.get("unitPrice", "").strip()
+        qty_str      = request.form.get("pieces", "").strip()
 
-        if not product:
+        if not product_name:
             error = "Product name is required."
         elif not price_str or not qty_str:
             error = "Please fill in all fields."
@@ -140,22 +155,27 @@ def sale():
                 elif qty < 1:
                     error = "Quantity must be at least 1."
                 else:
-                    balance, warehouse, operations = load_data()
+                    product = Product.query.filter_by(name=product_name).first()
 
-                    if product not in warehouse:
-                        error = "Product '" + product + "' not found in warehouse."
-                    elif warehouse[product]["qty"] < qty:
-                        error = "Not enough stock. Available: " + str(warehouse[product]["qty"])
+                    if product is None:
+                        error = "Product '" + product_name + "' not found in warehouse."
+                    elif product.quantity < qty:
+                        error = "Not enough stock. Available: " + str(product.quantity)
                     else:
-                        total = price * qty
-                        balance = balance + total
-                        warehouse[product]["qty"] = warehouse[product]["qty"] - qty
-                        operations.append("Sale " + product + " " + str(price) + " " + str(qty))
-                        save_data(balance, warehouse, operations)
-                        success = "Sale completed! Sold " + str(qty) + "x " + product + " for €" + str(round(total, 2))
+                        total   = price * qty
+                        balance = get_balance()
+                        balance.amount   = balance.amount + total
+                        product.quantity = product.quantity - qty
+                        t = Transaction(description="Sale " + product_name + " " + str(price) + " x" + str(qty))
+                        db.session.add(t)
+                        db.session.commit()
+                        success = "Sale completed! Sold " + str(qty) + "x " + product_name + " for €" + str(round(total, 2))
 
             except ValueError:
                 error = "Price and quantity must be valid numbers."
+            except Exception as e:
+                db.session.rollback()
+                error = "Database error: " + str(e)
 
     return render_template("sale.html", error=error, success=success)
 
@@ -167,7 +187,7 @@ def sale():
 @app.route("/balance/", methods=["GET", "POST"])
 def balance_change():
     """Balance change form — GET shows the form, POST handles submission."""
-    error = None
+    error   = None
     success = None
 
     if request.method == "POST":
@@ -178,29 +198,32 @@ def balance_change():
             error = "Amount is required."
         else:
             try:
-                amount = float(amount_str)
+                amount  = float(amount_str)
+                balance = get_balance()
 
                 if amount <= 0:
                     error = "Amount must be greater than 0."
-                else:
-                    balance, warehouse, operations = load_data()
-
-                    if operation == "subtract":
-                        if balance < amount:
-                            error = "Not enough balance to subtract €" + str(amount)
-                        else:
-                            balance = balance - amount
-                            operations.append("Balance change -" + str(amount))
-                            save_data(balance, warehouse, operations)
-                            success = "Balance updated! Subtracted €" + str(round(amount, 2)) + ". New balance: €" + str(round(balance, 2))
+                elif operation == "subtract":
+                    if balance.amount < amount:
+                        error = "Not enough balance to subtract €" + str(amount)
                     else:
-                        balance = balance + amount
-                        operations.append("Balance change +" + str(amount))
-                        save_data(balance, warehouse, operations)
-                        success = "Balance updated! Added €" + str(round(amount, 2)) + ". New balance: €" + str(round(balance, 2))
+                        balance.amount = balance.amount - amount
+                        t = Transaction(description="Balance change -" + str(amount))
+                        db.session.add(t)
+                        db.session.commit()
+                        success = "Balance updated! Subtracted €" + str(round(amount, 2)) + ". New balance: €" + str(round(balance.amount, 2))
+                else:
+                    balance.amount = balance.amount + amount
+                    t = Transaction(description="Balance change +" + str(amount))
+                    db.session.add(t)
+                    db.session.commit()
+                    success = "Balance updated! Added €" + str(round(amount, 2)) + ". New balance: €" + str(round(balance.amount, 2))
 
             except ValueError:
                 error = "Amount must be a valid number."
+            except Exception as e:
+                db.session.rollback()
+                error = "Database error: " + str(e)
 
     return render_template("balance_change.html", error=error, success=success)
 
@@ -214,21 +237,28 @@ def balance_change():
 @app.route("/history/")
 @app.route("/history/<int:line_from>/<int:line_to>/")
 def history(line_from=None, line_to=None):
-    """History page — shows all or filtered operations."""
-    balance, warehouse, operations = load_data()
+    """History page — shows all or filtered transactions from database."""
+    error = None
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
-    if line_from is None and line_to is None:
-        # No parameters — show all
-        displayed = list(enumerate(operations))
-    else:
-        # Validate range
-        if line_from < 0 or line_to >= len(operations) or line_from > line_to:
-            error = "Invalid range. From: " + str(line_from) + " To: " + str(line_to) + " (max: " + str(len(operations) - 1) + ")"
-            displayed = list(enumerate(operations))
+    try:
+        all_transactions = Transaction.query.all()
+
+        if line_from is None and line_to is None:
+            # No parameters — show all
+            displayed = list(enumerate(t.description for t in all_transactions))
         else:
-            displayed = list(enumerate(operations))[line_from:line_to + 1]
+            total = len(all_transactions)
+
+            if line_from < 0 or line_to >= total or line_from > line_to:
+                error     = "Invalid range. Max index: " + str(total - 1)
+                displayed = list(enumerate(t.description for t in all_transactions))
+            else:
+                subset    = all_transactions[line_from:line_to + 1]
+                displayed = [(line_from + i, t.description) for i, t in enumerate(subset)]
+
+    except Exception as e:
+        error     = "Database error: " + str(e)
+        displayed = []
 
     return render_template("history.html",
                            operations=displayed,
@@ -238,8 +268,11 @@ if __name__ == "__main__":
 
 
 # ─────────────────────────────────────────
-#  RUN
+#  CREATE TABLES & RUN
 # ─────────────────────────────────────────
 
+with app.app_context():
+    db.create_all()
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
