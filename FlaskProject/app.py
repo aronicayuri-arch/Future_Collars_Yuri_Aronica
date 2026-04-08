@@ -196,7 +196,7 @@ def balance_change():
 @app.route("/history/")
 @app.route("/history/<int:line_from>/<int:line_to>/")
 def history(line_from=None, line_to=None):
-    """History page — shows all or filtered transactions from database."""
+    """History page — shows all or filtered operations."""
     operations = [t.description for t in Transaction.query.all()]
     error = None
 
@@ -210,7 +210,7 @@ def history(line_from=None, line_to=None):
             displayed = list(enumerate(operations))[line_from:line_to + 1]
 
     return render_template("history.html", operations=displayed,
-                           line_from=line_from, line_to=line_to, error=error)
+                         line_from=line_from, line_to=line_to, error=error)
             except Exception as e:
                 db.session.rollback()
                 error = "Database error: " + str(e)
